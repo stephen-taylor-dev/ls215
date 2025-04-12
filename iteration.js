@@ -89,15 +89,36 @@
 // console.log(myReduce([5, 12, 15, 1, 6], smallest) === 1);   // 1
 // console.log(myReduce([5, 12, 15, 1, 6], sum, 10) === 49);   // 49
 
-function myOwnEvery(array, func) {
-  for (let index = 0; index < array.length; index += 1) {
-    if (!func(array[index])) {
-      return false;
-    }
-  }
+// function myOwnEvery(array, func) {
+//   for (let index = 0; index < array.length; index += 1) {
+//     if (!func(array[index])) {
+//       return false;
+//     }
+//   }
 
-  return true;
+//   return true;
+// }
+
+// let isAString = value => typeof value === 'string';
+// console.log(myOwnEvery(['a', 'a234', '1abc'], isAString));       // true
+
+
+let studentGrades = [
+  { name: 'StudentA', grade: 90.1 },
+  { name: 'StudentB', grade: 92 },
+  { name: 'StudentC', grade: 91.8 },
+  { name: 'StudentD', grade: 95.23 },
+  { name: 'StudentE', grade: 91.81 },
+];
+
+function compareGrades(student1, student2) {
+  if (student1.grade < student2.grade) {
+    return 1;
+  } else if (student1.grade > student2.grade) {
+    return -1;
+  } else {
+    return 0;
+  }
 }
 
-let isAString = value => typeof value === 'string';
-console.log(myOwnEvery(['a', 'a234', '1abc'], isAString));       // true
+console.log(studentGrades.sort());

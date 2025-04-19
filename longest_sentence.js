@@ -50,33 +50,32 @@ output count of words in longest sentence
 
 */
 
-// function longestSentence(text) {
-//   // Find all the sentences.
-//   const sentences = text.match(/\w[^.!?]+[.!?]/g);
+function longestSentence(text) {
+  // Find all the sentences. Word starts with anything other than ' ', '.', '!', '?' 
+  const sentences = text.match(/[^ .!?][^.!?]*[.!?]/g);
 
-//   // Initialze variable for index of longest sentence found
-//   let longestSentenceIndex;
+  // Find the longest sentence
+  let sentence = sentences.reduce((longest, sentence, index) => {
+    // Find num of words in sentence
+    let sentenceWordCount = sentence.split(/\s+/).length;
 
-//   // Find the number of words in the longest sentence
-//   let numberOfWords = sentences.reduce((longestWordCount, sentence, index) => {
-//     // Find num of words in sentence
-//     let sentenceWordCount = sentence.split(/\s+/).length;
+    // Check if current sentence is longer than longest seen
+    if (longest.wordCount === undefined || longest.wordCount < sentenceWordCount) {
+      longest.index = index;
+      longest.wordCount = sentenceWordCount;
+    }
 
-//     // Check if current sentence is longer than longest seen
-//     if (longestWordCount < sentenceWordCount) {
-//       longestSentenceIndex = index;
-//       return sentenceWordCount;
-//     }
+    return longest;
+  }, {});
 
-//     return longestWordCount;
-//   }, 0);
+  // Output sentence and count to console
+  console.log(sentences[sentence.index]);
+  console.log(`\nThe longest sentence has ${sentence.wordCount} words.`);
+}
 
-//   // Output sentence and count to console
-//   console.log(sentences[longestSentenceIndex]);
-//   console.log(`\nThe longest sentence has ${numberOfWords} words.`);
-// }
-
-// longestSentence(longText);
+longestSentence(longText);
+longestSentence("I!");
+longestSentence("$#@*$%, he mumbled. What's up?");
 
 // console output
 // It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth.
@@ -94,16 +93,25 @@ output count of words in longest sentence
 // The longest sentence has 30 words.
 
 
-function foo(list) {
-  return list.map(function (word) {
-    return word.match(/[aeiou]/gi) || [];
-  }).reduce(function (acc, letterList) {
-    console.log(letterList)
-    return acc + letterList.length;
-  }, 0);
-}
+// I!
 
-console.log(foo(['cart', 'truck', 'cart', 'train']));
-console.log(foo(['apple', 'banana', 'orange']));
-console.log(foo(['a', 'b', 'c']));
-console.log(foo(['a', 'e', 'i', 'o', 'u']));
+// The longest sentence has 1 word(s).
+
+
+// $#@*$%, he mumbled.
+
+// The longest sentence has 3 word(s).
+
+// function foo(list) {
+//   return list.map(function (word) {
+//     return word.match(/[aeiou]/gi) || [];
+//   }).reduce(function (acc, letterList) {
+//     console.log(letterList)
+//     return acc + letterList.length;
+//   }, 0);
+// }
+
+// console.log(foo(['cart', 'truck', 'cart', 'train']));
+// console.log(foo(['apple', 'banana', 'orange']));
+// console.log(foo(['a', 'b', 'c']));
+// console.log(foo(['a', 'e', 'i', 'o', 'u']));

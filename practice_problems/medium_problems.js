@@ -511,14 +511,65 @@ if arge == 2
 other call fib(n - 1) + fib( n - 2)
 
 
-*/
+// */
 
-function fibonacci(num) {
-  if (num <= 2) {
-    return 1;
-  } else {
-    return fibonacci(num - 1) + fibonacci(num - 2)
-  }
+// function fibonacci(num) {
+//   if (num <= 2) {
+//     return 1;
+//   } else {
+//     return fibonacci(num - 1) + fibonacci(num - 2)
+//   }
+// }
+
+// console.log(fibonacci(1));       // 1
+// console.log(fibonacci(2));       // 1
+// console.log(fibonacci(3));       // 2
+// console.log(fibonacci(4));       // 3
+// console.log(fibonacci(5));       // 5
+// console.log(fibonacci(12));      // 144
+// console.log(fibonacci(20));      // 6765
+
+
+
+//imperative fibonacci
+// 1 1 2 3 5 8 13 21 34 55 89 144
+// 1 2 3 4 5 6 7  8  9  10 11 12
+
+// function fibonacci(number) {
+//   if (number <= 2) return 1;
+
+//   let first = 1;
+//   let second = 1;
+//   let fib;
+
+//   for (let index = 3; index <= number; index += 1) {
+//     fib = first + second;
+//     first = second;
+//     second = fib;
+//   }
+
+//   return fib;
+// }
+
+// console.log(fibonacci(1));       // 1
+// console.log(fibonacci(2));       // 1
+// console.log(fibonacci(3));       // 2
+// console.log(fibonacci(4));       // 3
+// console.log(fibonacci(5));       // 5
+// console.log(fibonacci(12));      // 144
+// console.log(fibonacci(20));      // 6765
+
+
+// recursive memoization
+
+function fibonacci(num, memo) {
+  memo = memo || {};
+
+  if (memo[num]) return memo[num];
+  if (num <= 2) return 1;
+
+  return memo[num] = fibonacci(num - 1, memo) + fibonacci(num - 2, memo);
+  
 }
 
 console.log(fibonacci(1));       // 1
@@ -528,3 +579,4 @@ console.log(fibonacci(4));       // 3
 console.log(fibonacci(5));       // 5
 console.log(fibonacci(12));      // 144
 console.log(fibonacci(20));      // 6765
+console.log(fibonacci(50));      // 6765

@@ -1,3 +1,5 @@
+"use strict";
+
 /*
 
 p
@@ -268,62 +270,309 @@ takes char as arg
 
 */
 
-const LETTERS = 26;
+// const LETTERS = 26;
 
-function caesarEncrypt(text, rotation) {
-  let chars = [...text];
-  return chars.map(char => {
-    if (/[^a-z]/i.test(char)) {
-      return char;
-    } else if (/[A-Z]/.test(char)) {
-      return rotateUppercaseLetter(char, rotation);
-    } else if (/[a-z]/.test(char)) {
-      return rotateLowercaseLetter(char, rotation);
-    }
-  }).join('');
-}
+// function caesarEncrypt(text, rotation) {
+//   let chars = [...text];
+//   return chars.map(char => {
+//     if (/[^a-z]/i.test(char)) {
+//       return char;
+//     } else if (/[A-Z]/.test(char)) {
+//       return rotateUppercaseLetter(char, rotation);
+//     } else if (/[a-z]/.test(char)) {
+//       return rotateLowercaseLetter(char, rotation);
+//     }
+//   }).join('');
+// }
 
-function rotateLowercaseLetter(char, rotation) {
-  let code = char.charCodeAt(0);
-  let shift = rotation % LETTERS;
-  code += shift;
-  if (code > 'z'.charCodeAt(0)) {
-    shift = code - 'z'.charCodeAt(0);
-    code = 'a'.charCodeAt(0) + shift - 1;
+// function rotateLowercaseLetter(char, rotation) {
+//   let code = char.charCodeAt(0);
+//   let shift = rotation % LETTERS;
+//   code += shift;
+//   if (code > 'z'.charCodeAt(0)) {
+//     shift = code - 'z'.charCodeAt(0);
+//     code = 'a'.charCodeAt(0) + shift - 1;
+//   }
+//   return String.fromCharCode(code);
+// }
+
+
+// function rotateUppercaseLetter(char, rotation) {
+//   let code = char.charCodeAt(0);
+//   let shift = rotation % LETTERS;
+//   code += shift;
+//   if (code > 'Z'.charCodeAt(0)) {
+//     shift = code - 'Z'.charCodeAt(0);
+//     code = 'A'.charCodeAt(0) + shift - 1;
+//   }
+//   return String.fromCharCode(code);
+// }
+
+
+// // // simple shift
+// console.log(caesarEncrypt('A', 0));       // "A"
+// console.log(caesarEncrypt('A', 3));       // "D"
+
+// // // wrap around
+// console.log(caesarEncrypt('y8', 5));       // "d8"
+// console.log(caesarEncrypt('a', 47));      // "v"
+
+// // // all letters
+// console.log(caesarEncrypt('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 25) === "ZABCDEFGHIJKLMNOPQRSTUVWXY");   // "ZABCDEFGHIJKLMNOPQRSTUVWXY"
+// console.log(caesarEncrypt('abcdefghijklmnopqrstuvwxyz', 25) === 'zabcdefghijklmnopqrstuvwxy');   // 'zabcdefghijklmnopqrstuvwxy'
+// console.log(caesarEncrypt('The quick brown fox jumps over the lazy dog!', 5) === "Ymj vznhp gwtbs ktc ozrux tajw ymj qfed itl!");
+// // // 
+
+// // // many non-letters
+// console.log(caesarEncrypt('There are, as you can see, many punctuations. Right?; Wrong?', 2) === "Vjgtg ctg, cu aqw ecp ugg, ocpa rwpevwcvkqpu. Tkijv?; Ytqpi?");
+// // // 
+
+// // // edge case
+// console.log(caesarEncrypt('', 3) === '');       // ""
+
+
+/*
+problem
+input: string (message to encrypt), and string (keyword) shifter
+output: string encrypted message
+
+rules
+- non-letters does not move the encryption keyword forward (stay the same)
+  - only encrypts alphabetic characters 
+- case in keyword does not matter
+- but case in orignal message should be the same
+- a is shift value of 0
+
+examples
+Pineapples don't go on pizzas
+
+hello, world
+secre  tsecr
+zincs, pgvno
+
+okkkk
+heyhe
+voiro
+
+e 4
+e 4
+add both index together to get ciphered char
+
+z 25
+c 2
+b 1
+
+data structures
+constant string of the alphabet
+string of the message
+
+string of keyword
+
+
+algorithm
+initialze and cipheredText string to empty string
+initialze outer index for keyword index set to 0;
+loop over each char in the input message text
+  if current index of the keyword string gives undefine 
+      set the index to 0
+  if the character is not a letter
+      add the character to the cipheredText string
+  else
+    shift the char
+    add the character to the cipheredText string
+    increment the keyword string index by 1 
+
+
+return cipheredText string
+
+shiftchar
+  (current char, the shift char)
+  find the index of current char(lowecase of it)
+  find the index of current keyword char (lowercase of it)
+  add the two idnexes together
+  find this idnex in the alphabet
+  if original char if uppercase
+    return uppercae of letter
+  else
+    return lowercase of the letter
+*/
+
+// const ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
+
+// // Encrypt message with vigenere cipher algorithm
+// function vigenereCipher(message, keyword) {
+//   let cipheredText = '';
+//   let keywordIdx = 0;
+
+//   for (let idx = 0; idx < message.length; idx += 1) {
+//     let char = message[idx];
+//     if (/[a-z]/gi.test(char)) {
+//       char = shiftchar(char, keyword[keywordIdx]);
+//       // reset keyword index to 0 if at last char in keyword
+//       keywordIdx = (keywordIdx + 1) < keyword.length ? keywordIdx + 1 : 0;
+//     }
+//     cipheredText = cipheredText + char;
+//   }
+
+//   return cipheredText;
+// }
+
+
+// function shiftchar(mainChar, keywordChar) {
+//   let mainCharIdx = ALPHABET.indexOf(mainChar.toLowerCase());
+//   let keywordCharIdx = ALPHABET.indexOf(keywordChar.toLowerCase());
+//   // Get shift index accounting for looping around alphabet
+//   let cipheredCharIdx = (mainCharIdx + keywordCharIdx) % 26;
+//   let cipheredChar = ALPHABET[cipheredCharIdx];
+
+//   return /[A-Z]/.test(mainChar) ? cipheredChar.toLocaleUpperCase() : cipheredChar;
+// }
+
+
+// console.log(vigenereCipher("Pineapples don't go on pizzas!", 'meat') === "Bmnxmtpeqw dhz'x gh ar pbldal!");
+// console.log(vigenereCipher('hello, world!', 'secret') === "zincs, pgvnu!");
+
+// // // Capital letters
+// console.log(vigenereCipher('HelLo, World!', 'SecreT') === "ZinCs, Pgvnu!");
+
+// // // repeated
+// console.log(vigenereCipher('okkkk', 'hey') === "voiro");
+
+
+// // // Edge cases
+// // // numbers included
+// console.log(vigenereCipher('HelLo, World 23!', 'SecreT') === "ZinCs, Pgvnu 23!");
+
+// // // empty inputs
+// // console.log(vigenereCipher('', 'SecreT') === "");
+// // console.log(vigenereCipher('', '') === "");
+// // console.log(vigenereCipher('hello', '') === "");
+// // console.log(vigenereCipher('hello', '!!,,,') === "hello");
+
+// seeing stars
+
+/*
+
+problem:
+input: integer
+output: log to console
+
+rules
+- min star size to handle is 7
+- input will always be odd integer
+
+
+- star is made up of n rows
+- middle row has n stars
+- each other row has 3 stars with different spacing
+- top and bottom of star has floor (n / 2) branches
+
+
+- each outer row increases space between middle star by 1 
+examples
+7
+*  *  *
+ * * *
+  ***
+*******
+  ***
+ * * *
+*  *  *
+
+9
+*   *   *
+ *  *  *
+  * * *
+   ***
+*********
+   ***
+  * * *
+ *  *  *
+*   *   *
+data structure
+strings
+numbers
+
+
+algorithm
+startpadding set to 0
+betweenpadding set to n - 3
+
+each iteration start increases by 1 between decreases by 1
+
+high level
+  output top part
+  output middle part
+  output bottom part
+
+
+startpadding set to 0
+betweenpadding set to n - 3 / 2
+
+  top part
+  loop up to but not including floor (n / 2) times
+  output 3 stars with loop index padding amount
+  inbetween padding uses separate variabble
+    initialze new empty string
+    add padding white space if any
+    add star
+    add between white space 
+    add star
+    add between white space
+    add star
+    output string
+    decrease between padding by 1
+    
+output n stars to console
+set startpadding to n - 3 / 2
+loop from 0 up to but not including floor (n / 2) times
+  output 3 stars with loop index padding amount
+  inbetween padding uses loop index
+    initialze new empty string
+    add padding white space if any
+    add star
+    add between white space 
+    add star
+    add between white space
+    add star
+    output string
+    decrease between padding by 1
+
+
+
+
+*/
+
+const COUNT = 3
+
+function star(stars) {
+  let betweenPadding = (stars - COUNT) / 2;
+  let line;
+  for (let startPadding = 0; startPadding < Math.floor(stars / 2); startPadding += 1) {
+    line = ' '.repeat(startPadding) + 
+           '*' + 
+           ' '.repeat(betweenPadding) + 
+           '*' + 
+           ' '.repeat(betweenPadding) +
+           '*'
+    console.log(line);
+    betweenPadding -= 1;
   }
-  return String.fromCharCode(code);
-}
 
-
-function rotateUppercaseLetter(char, rotation) {
-  let code = char.charCodeAt(0);
-  let shift = rotation % LETTERS;
-  code += shift;
-  if (code > 'Z'.charCodeAt(0)) {
-    shift = code - 'Z'.charCodeAt(0);
-    code = 'A'.charCodeAt(0) + shift - 1;
+  console.log('*'.repeat(stars));
+  
+  let startPadding = (stars - COUNT) / 2;
+  for (betweenPadding = 0; betweenPadding < Math.floor(stars / 2); betweenPadding += 1) {
+    line = ' '.repeat(startPadding) + 
+           '*' + 
+           ' '.repeat(betweenPadding) + 
+           '*' + 
+           ' '.repeat(betweenPadding) +
+           '*'
+    console.log(line);
+    startPadding -= 1;
   }
-  return String.fromCharCode(code);
 }
 
 
-// // simple shift
-console.log(caesarEncrypt('A', 0));       // "A"
-console.log(caesarEncrypt('A', 3));       // "D"
-
-// // wrap around
-console.log(caesarEncrypt('y8', 5));       // "d8"
-console.log(caesarEncrypt('a', 47));      // "v"
-
-// // all letters
-console.log(caesarEncrypt('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 25) === "ZABCDEFGHIJKLMNOPQRSTUVWXY");   // "ZABCDEFGHIJKLMNOPQRSTUVWXY"
-console.log(caesarEncrypt('abcdefghijklmnopqrstuvwxyz', 25) === 'zabcdefghijklmnopqrstuvwxy');   // 'zabcdefghijklmnopqrstuvwxy'
-console.log(caesarEncrypt('The quick brown fox jumps over the lazy dog!', 5) === "Ymj vznhp gwtbs ktc ozrux tajw ymj qfed itl!");
-// // 
-
-// // many non-letters
-console.log(caesarEncrypt('There are, as you can see, many punctuations. Right?; Wrong?', 2) === "Vjgtg ctg, cu aqw ecp ugg, ocpa rwpevwcvkqpu. Tkijv?; Ytqpi?");
-// // 
-
-// // edge case
-console.log(caesarEncrypt('', 3) === '');       // ""
+star(9)

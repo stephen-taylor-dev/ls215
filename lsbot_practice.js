@@ -160,105 +160,623 @@ return the max value
 */
 
 
-function maxProductSubarray(array) {
-  // guard clauses
-  if (array === undefined) return 'Invalid Input';
-  if (array.length === 0 ) return 0;
-  if (array.length === 1) return array[0];
-
-  let combinations = findCombinations(array);
-
-  let max = -Infinity;
-
-  combinations.forEach(comb => {
-    let product = comb.reduce((prod, fac) => {
-      fac = fac !== undefined ? fac : 1;
-      return prod * fac
-    }, 1);
-
-    if (product > max) {
-      if (Number.isInteger(product)) {
-        max = product === 0 ? 0 : product;
-      } else {
-        max = Number(product.toFixed(2));
-      }
-    }
-  });
-
-  return max;
-}
-
-
-function findCombinations(arr) {
-  let combinations = [];
-
-  for (let sliceSize = 2; sliceSize <= arr.length; sliceSize += 1) {
-    for (let sliceIdx = 0; sliceIdx <= arr.length - sliceSize; sliceIdx += 1) {
-      combinations.push(arr.slice(sliceIdx, sliceIdx + sliceSize)); 
-    }
-  }
-
-  return combinations;
-}
-// [1,2,3,4,5,6,7,8,9, 10]
-console.log(findCombinations([1,2,3]));
-console.log(findCombinations([2, 3, -2, 4]));
-console.log(findCombinations([-2, 0, -1]));
-
-
-
 // function maxProductSubarray(array) {
+//   // guard clauses
 //   if (array === undefined) return 'Invalid Input';
-//   if (array.length === 0) return 0;
+//   if (array.length === 0 ) return 0;
 //   if (array.length === 1) return array[0];
-  
-//   let maxSoFar = array[0];
-//   let minSoFar = array[0]; // We track minimum too because of negative numbers
-//   let result = array[0];
-  
-//   for (let i = 1; i < array.length; i++) {
-//     // If we encounter a 0, reset the max and min
-//     if (array[i] === 0) {
-//       maxSoFar = 0;
-//       minSoFar = 0;
-//       result = Math.max(0, result);
-//       continue;
+
+//   let combinations = findCombinations(array);
+
+//   let max = -Infinity;
+
+//   combinations.forEach(comb => {
+//     let product = comb.reduce((prod, fac) => {
+//       fac = fac !== undefined ? fac : 1;
+//       return prod * fac
+//     }, 1);
+
+//     if (product > max) {
+//       if (Number.isInteger(product)) {
+//         max = product === 0 ? 0 : product;
+//       } else {
+//         max = Number(product.toFixed(2));
+//       }
 //     }
+//   });
+
+//   return max;
+// }
+
+
+// function findCombinations(arr) {
+//   let combinations = [];
+
+//   for (let sliceSize = 2; sliceSize <= arr.length; sliceSize += 1) {
+//     for (let sliceIdx = 0; sliceIdx <= arr.length - sliceSize; sliceIdx += 1) {
+//       combinations.push(arr.slice(sliceIdx, sliceIdx + sliceSize)); 
+//     }
+//   }
+
+//   return combinations;
+// }
+// // [1,2,3,4,5,6,7,8,9, 10]
+// console.log(findCombinations([1,2,3]));
+// console.log(findCombinations([2, 3, -2, 4]));
+// console.log(findCombinations([-2, 0, -1]));
+
+
+
+// // function maxProductSubarray(array) {
+// //   if (array === undefined) return 'Invalid Input';
+// //   if (array.length === 0) return 0;
+// //   if (array.length === 1) return array[0];
+  
+// //   let maxSoFar = array[0];
+// //   let minSoFar = array[0]; // We track minimum too because of negative numbers
+// //   let result = array[0];
+  
+// //   for (let i = 1; i < array.length; i++) {
+// //     // If we encounter a 0, reset the max and min
+// //     if (array[i] === 0) {
+// //       maxSoFar = 0;
+// //       minSoFar = 0;
+// //       result = Math.max(0, result);
+// //       continue;
+// //     }
     
-//     // Store previous values before updating
-//     let tempMax = maxSoFar;
-//     let tempMin = minSoFar;
+// //     // Store previous values before updating
+// //     let tempMax = maxSoFar;
+// //     let tempMin = minSoFar;
     
-//     // Update max and min based on current value
-//     maxSoFar = Math.max(array[i], Math.max(tempMax * array[i], tempMin * array[i]));
-//     minSoFar = Math.min(array[i], Math.min(tempMax * array[i], tempMin * array[i]));
+// //     // Update max and min based on current value
+// //     maxSoFar = Math.max(array[i], Math.max(tempMax * array[i], tempMin * array[i]));
+// //     minSoFar = Math.min(array[i], Math.min(tempMax * array[i], tempMin * array[i]));
     
-//     // Update result if needed
-//     result = Math.max(result, maxSoFar);
+// //     // Update result if needed
+// //     result = Math.max(result, maxSoFar);
+// //   }
+  
+// //   return result;
+// // }
+
+
+
+
+
+// // // // // Main test cases
+// console.log(maxProductSubarray([2, 3, -2, 4]));         // 6 (from subarray [2, 3])
+// console.log(maxProductSubarray([-2, 0, -1]));              // 0 (from subarray [0])
+// console.log(maxProductSubarray([1, 2, 3, 4]));          // 24 (from subarray [1, 2, 3, 4])
+// console.log(maxProductSubarray([]));                    // 0
+
+// console.log(maxProductSubarray([.5, .2]));          // 0.1
+// console.log(maxProductSubarray([1]));          // 1 
+
+
+
+// // // // edge cases
+// console.log(maxProductSubarray([1, , 2, 3])); // 6
+// console.log(maxProductSubarray([1,]));         // 1
+
+
+// // // // // error cases
+// console.log(maxProductSubarray()) // 'Invalid input'
+
+
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+/*
+Problem: Character Counter
+Write a function called characterCounter that processes strings based on character frequency. The function should return an object that categorizes the characters in the string, providing a clear picture of character distribution. For example, the object might include properties for letters, numbers, and other characters.
+Rules:
+1.  The function should count the occurrences of each character in the input string
+2.  Characters should be organized into categories in the result object
+3.  The function should return an object with the following properties:
+    •   letters: An object containing letter characters as keys and their counts as values
+    •   numbers: An object containing numeric characters as keys and their counts as values
+    •   others: An object containing all other characters as keys and their counts as values
+4.  If a category has no characters, it should still be included as an empty object
+
+Rules
+- case insensitive
+- non-string inputs convet to string if possible else return `null`
+- spaces count as other characters
+- special numbers should be treated as normal chars
+- only consider ascii chars
+
+
+Examples:
+
+characterCounter("Hello123!"); 
+// { 
+//   letters: { h: 1, e: 1, l: 2, o: 1 }, 
+//   numbers: { '1': 1, '2': 1, '3': 1 }, 
+//   others: { '!': 1 } 
+// }
+
+characterCounter("aaBBcc");
+// { 
+//   letters: { a: 2, b: 2, c: 2 }, 
+//   numbers: {}, 
+//   others: {} 
+// }
+
+characterCounter("42");
+// { 
+//   letters: {}, 
+//   numbers: { '4': 1, '2': 1 }, 
+//   others: {} 
+// }
+
+Question
+Will we always be given arg? what to do if not
+Will we always be given 1 arg? how should be handle extra args
+
+will it always be a string? how to ahndle that
+will it ever be empty string? what to return?
+will it contain white space like tabs, returns spaces? how should be added to the object if so?
+will it contain negative numbers such as '-42' how should handle this situation?
+will need to detect special numbers in string such as Infinity -Infinity Nan
+is for sure case insensitive
+
+
+
+Data structure:
+const counts = { 
+  letters: {}, 
+  numbers: {}, 
+  others: {} 
+}
+
+Strings
+
+
+
+
+Algorithm;
+  High level:
+    - Get the count of each unique character in the string
+    - add count to our object
+    - return the object
+
+Lower level
+- use for loop to iterate from 0 to length - 1 of string
+  - Check if lowercase of char is a letter ([a-z]/i)
+    - increment key
+  - check if it is a digit
+    - increment key
+  - otherwise 
+    - increment key
+- return object 
+
+
+helper methods
+  increment Key in object, takes 1 stirng key argument, type of key,  and 1 object, 
+    if key is in object
+      increment key value by 1
+    else
+      add key with value of 1
+    - either add key and 1 to object
+    - or increment key by 1
+  returns undefined
+*/
+
+
+// function characterCounter(string) {
+//   const counts = { 
+//     letters: {}, 
+//     numbers: {}, 
+//     others: {} 
 //   }
   
-//   return result;
+//   if (string === '') return counts;
+//   string = String(string);
+
+//   for (let i = 0; i < string.length; i += 1) {
+//     let char = string[i].toLowerCase();
+//     // Letters
+//     if (/[a-z]/i.test(char)) incrementKey(char, 'letters', counts);
+//     // Numbers
+//     else if (/[\d]/.test(char)) incrementKey(char, 'numbers', counts); 
+//     // Others
+//     else incrementKey(char, 'others', counts);
+//   }
+
+//   return counts;
+// }
+
+
+// function incrementKey(key, type, object) {
+//   if (object[type][key] !== undefined) {
+//     object[type][key] = object[type][key] + 1;
+//   } else {
+//     object[type][key] = 1;
+//   }
+// }
+
+// // Happy paths
+// console.log(characterCounter("Hello123!"));
+// // { 
+// //   letters: { h: 1, e: 1, l: 2, o: 1 }, 
+// //   numbers: { '1': 1, '2': 1, '3': 1 }, 
+// //   others: { '!': 1 } 
+// // }
+
+// console.log(characterCounter("aaBBcc"));
+// // // { 
+// // //   letters: { a: 2, b: 2, c: 2 }, 
+// // //   numbers: {}, 
+// // //   others: {} 
+// // // }
+
+// console.log(characterCounter("42"));
+// // // { 
+// // //   letters: {}, 
+// // //   numbers: { '4': 1, '2': 1 }, 
+// // //   others: {} 
+// // // }
+// console.log(characterCounter("4224"));
+// // // { 
+// // //   letters: {}, 
+// // //   numbers: { '4': 2, '2': 2 }, 
+// // //   others: {} 
+// // // }
+
+// console.log(characterCounter("4  2"));
+// // // { 
+// // //   letters: {}, 
+// // //   numbers: { '4': 1, '2': 1 }, 
+// // //   others: {' ': 2} 
+// // // }
+
+
+// // // Edge Cases
+// console.log(characterCounter("")); 
+// // // { 
+// // //   letters: {}, 
+// // //   numbers: {}, 
+// // //   others: {} 
+// // // }
+
+// // // Non-string input
+// console.log(characterCounter([1,2,3,4]));
+// // // { 
+// // //   letters: {}, 
+// // //   numbers: {'1': 1, '2': 1, '3': 1, '4': 1}, 
+// // //   others: {',': 3} 
+// // // }
+// console.log(characterCounter({'a': 1}));
+// // // { 
+// //   //   letters: {o: 2, b: 2, j: 2, e: 2, c: 2, t: 2}, 
+// //   //   numbers: {}, 
+// //   //   others: {'[': 1, ' ': 1, ']': 1} 
+// //   // }
+// console.log(characterCounter(true));
+// // // { 
+// //   //   letters: {t: 1, r: 1, u: 1, e: 1}, 
+// //   //   numbers: {}, 
+// //   //   others: {} 
+// //   // }
+// console.log(characterCounter(42));
+// // // { 
+// // //   letters: {}, 
+// // //   numbers: { '4': 1, '2': 1 }, 
+// // //   others: {} 
+// // // }
+// console.log(characterCounter(undefined));
+// // // { 
+// // //   letters: {u: 1, n: 2: d: 2, e: 2, f: 1, i: 1}, 
+// // //   numbers: { }, 
+// // //   others: {} 
+// // // }
+
+
+// // // Case insensitive
+// console.log(characterCounter("aaBBccAAbb"));
+// // // { 
+// // //   letters: { a: 4, b: 4, c: 2 }, 
+// // //   numbers: {}, 
+// // //   others: {} 
+// // // }
+
+
+// // Error Cases
+
+
+/*
+Problem Description
+Write a function called transformArray that takes an array as an argument and applies the following transformations:
+1.  If an element is a string, reverse it.
+2.  If an element is a number, square it.
+3.  Return a new array with the transformed elements.
+
+Rules
+- non number or string data tyeps should just be included in the output
+- reutrn string 'Invalid input' if arg input not array or missing
+
+Questions:
+Will we always have 1 input? 
+  what to return if missing? 
+  what to do if more than 1
+
+will input always be an array? if not how should handle it?
+
+will input be sparse array?
+will array contain any nubmer of elemetns?
+will array contain only strings, or numbers?
+  will array contain sub arrays or other objects
+  will array contain special livke undefined, null, booleasn?
+will array numbers ever be NaN or Infinity or -Infinity?
+
+what should return for empty string input in array?
+will strings contain white space?
+will it contain negative numbers 
+should negative numbers when squared return negative value?
+
+is the order of elements such as strings and numbers in the original array, should be they be the same in output array?
+
+Examples / Test Cases
+transformArray(['hello', 'world']);  // ['olleh', 'dlrow']
+transformArray([2, 4, 6]);  // [4, 16, 36]
+transformArray(['abc', 5, 'def']);  // ['cba', 25, 'fed']
+transformArray([]);  // []
+
+
+Data structures:
+input Array
+output array
+
+strings in the array
+numbers in the array
+
+
+Algorithm:
+- if arg missing or not array return error message
+- if arg is empyt array return empty array
+- loop over each element in the array
+  - if it is a string, revrse it and add to output array
+    - intialize an empty string
+    - loop from last index of string to first
+      - concat element to the string
+    - add this string to the output array
+  - if it is a number, square it and add ot ouptut array
+  - else add the element to the output array
+
+
+
+*/
+
+
+// function transformArray(arr) {
+//   if (!Array.isArray(arr)) return 'Invalid Input';
+//   if (arr.length === 0) return [];
+
+//   return arr.map(item => {
+//     if (typeof item === 'string') {
+//       // let reversed = '';
+//       // for(let i = item.length - 1; i >= 0; i -= 1) {
+//       //   reversed += item[i];
+//       // }
+//       // return reversed;
+//       return [...item].reverse().join('');
+//     } else if (typeof item === 'number') {
+//       return item * item;
+//     } else {
+//       return item;
+//     }
+//   });
 // }
 
 
 
 
 
-// // // // Main test cases
-console.log(maxProductSubarray([2, 3, -2, 4]));         // 6 (from subarray [2, 3])
-console.log(maxProductSubarray([-2, 0, -1]));              // 0 (from subarray [0])
-console.log(maxProductSubarray([1, 2, 3, 4]));          // 24 (from subarray [1, 2, 3, 4])
-console.log(maxProductSubarray([]));                    // 0
+// // Happy paths
+// console.log(transformArray(['hello', 'world']));  // ['olleh', 'dlrow']
+// console.log(transformArray([2, 4, 6]));  // [4, 16, 36]
+// console.log(transformArray(['abc', 5, 'def']));  // ['cba', 25, 'fed']
+// console.log(transformArray([]));  // []
 
-console.log(maxProductSubarray([.5, .2]));          // 0.1
-console.log(maxProductSubarray([1]));          // 1 
+// // Edge cases
+// // mixed data types
+// console.log(transformArray(['hello', true, 'world']));  // ['olleh', true, 'dlrow']
+// console.log(transformArray(['hello', [1, 2, 3], 'world']));  // ['olleh', [1, 2, 3], 'dlrow']
+
+// // empyt strings in array
+// console.log(transformArray(['']));  // ['']
+
+// // Other numbers
+// console.log(transformArray([-2, -4, -6]));  // [4, 16, 36]
+// console.log(transformArray([Infinity, 'hello']));  // [Infinity, 'olleh']
+// console.log(transformArray([-Infinity, 'hello']));  // [Infinity, 'olleh']
+// console.log(transformArray([NaN, 'hello']));  // [NaN, 'olleh']
+
+// // sparse array
+// console.log(transformArray(['hello', ,'world']));  // ['olleh', <1 missing element>, 'dlrow']
+
+// // Error cases
+// console.log(transformArray(32));  // 'Invalid Input'
+// console.log(transformArray());  // 'Invalid Input'
 
 
 
-// // // edge cases
-console.log(maxProductSubarray([1, , 2, 3])); // 6
-console.log(maxProductSubarray([1,]));         // 1
+
+/*
+Interview Question: String Scrambler
+Difficulty: Intermediate
+
+Problem Description
+Write a function named scramble that takes a string as an argument and returns a new string where each character is replaced according to the following rules:
+1.  Vowels ('a', 'e', 'i', 'o', 'u') should be replaced with the next vowel in the sequence (cycling back to 'a' after 'u').
+2.  Consonants should be replaced with the next consonant in the alphabet (cycling from 'z' back to 'b').
+3.  Digits should be replaced with the next digit (cycling from '9' back to '0').
+4.  Other characters should remain unchanged.
+Explicit Rules
+•   Replace vowels with the next vowel in the sequence (a→e, e→i, i→o, o→u, u→a)
+•   Replace consonants with the next consonant (b→c, c→d, ..., z→b)
+•   Replace digits with the next digit (0→1, 1→2, ..., 9→0)
+•   Non-alphanumeric characters remain unchanged
+•   Return a new string (don't modify the original)
+
+- Maintain original case
+- z loops to b
+- if arg is empty string return empty string
 
 
-// // // // error cases
-console.log(maxProductSubarray()) // 'Invalid input'
+Questions
+- will we always be givne 1 arg 
+  - if more than or no how to handle
+- what to return if empty string
+- will arg always be string ? how to handle if not
+- will string contain whitespace? if so how to handle?
+- will string ocntain numbers such as NaN INfinity - INfinity, or should we treat them as strings
+- is it case senitive a -> e A -> E
+- what about non-english letters?
+
+Examples / Test Cases
+scramble('hello');          // 'jimmu'
+scramble('coding');         // 'dufoph'
+scramble('ABCDEF');         // 'ECDGFG'
+scramble('a1b2c3');         // 'e2c3d4'
+scramble('ab-cd');          // 'ec-dd'
+
+a e i o u
+b c d f g h j k l m n p q r s t v w x y z
+
+hello
+jimmu
+coding
+dufoph
+
+ABCDEF
+ecdfig
+
+Data Structure:
+array or possbibly just string of vowels 
+array or possibly just string of consonants
+array of string of number 0-9
+
+input string
+new string to output
+
+
+Algorithm:
+Convert every character to its proper next element in its series range, respective of loop in range
+if consonant get next constant
+if vowel get next vowel 
+if digit get next digit
+
+
+lower level
+Global varaibles
+inititalze constants for vowels
+inititalze constants for consonants
+inititalze constants for digits
+
+- inititalze an scrambled string to empty string
+- loop over the string with for loop 
+  - if vowel
+    - findNextIdx
+    - get char from the idx 
+    - if original vowel is uppercase
+      - set char to upperse
+    - concat char to scrambled string
+  - if consonant 
+    - findNextIdx
+    - if original consonant is uppercase
+      - set char to uppercase
+     - concat to scrambled string
+  - if digit findNextIdx
+    - findNextChar 
+     - concat to scrambled string
+
+  - else add char to outup
+return scrambled string
+
+
+helper function
+findNextIdx(char, set) return number for index
+  - get the index of the char in the set of chars
+  - increment the index by 1
+  - take this value modulous of legnth of set
+  - set this remainder as the new char index
+  - return this index
+*/
+
+// const VOWELS = 'aeiou';
+// const CONSONANTS = 'bcdfghjklmnpqrstvwxyz';
+// const DIGITS = '0123456789';
+
+// function scramble(string) {
+//   let scrambled = '';
+
+//   let vowelRegex = new RegExp(`[${VOWELS}]`, 'i');
+//   let consRegex = new RegExp(`[${CONSONANTS}]`, 'i');
+//   let digitRegex = new RegExp(`[${DIGITS}]`);
+
+//   for (let i = 0; i < string.length; i += 1) {
+//     let char = string[i];
+//     // vowel
+//     if (vowelRegex.test(char)) {
+//       let idx = findNextIdx(char, VOWELS);
+//       let nextVowel = VOWELS[idx];
+//       scrambled += processLetterCase(char, nextVowel);
+//     // consonant
+//     } else if (consRegex.test(char)) {
+//       let idx = findNextIdx(char, CONSONANTS);
+//       let nextConsonant = CONSONANTS[idx];
+//       scrambled += processLetterCase(char, nextConsonant);;
+//     // digit
+//     } else if (digitRegex.test(char)) {
+//       let idx = findNextIdx(char, DIGITS);
+//       let number = DIGITS[idx];
+//       scrambled += number;
+//     } else {
+//       scrambled += char;
+//     }
+//   }
+
+//   return scrambled;
+// }
+
+// function processLetterCase(char, nextChar) {
+//   if (/[A-Z]/.test(char)) {
+//     nextChar = nextChar.toUpperCase();
+//   }
+//   return nextChar;
+// }
+
+// function findNextIdx(char, charSet) {
+//   let idx = charSet.indexOf(char.toLowerCase()) + 1;
+//   idx = idx % charSet.length;
+//   return idx;
+// }
+
+// // General
+// console.log(scramble('hello'));          // 'jimmu'
+// console.log(scramble('coding'));         // 'dufoph'
+// console.log(scramble('ABCDEF'));         // 'ECDFIG'
+// console.log(scramble('a1b2c3'));         // 'e2c3d4'
+// console.log(scramble('ab-cd'));          // 'ec-df'
+
+// // Edge Cases
+
+// // // Maintain case
+// console.log(scramble('HELLO'));          // 'JIMMU'
+
+// // // space and non-alphanumeric
+// console.log(scramble('ab cd'));          // 'ec df'
+// console.log(scramble('ab.cd'));          // 'ec.df'
+
+// // // empty string
+// console.log(scramble(''));          // ''
+
+// // looping u, z and 9
+// console.log(scramble('zbu9'));          // 'bca0'
+// console.log(scramble('ZBU9'));          // 'BCA0'

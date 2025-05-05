@@ -45,7 +45,8 @@
 // console.log(getConsecutiveCombinations([1,2,3,4], 2));
 
 
-let a = [[1], [1], [1]];
 
-console.log(a[0] === a[1]); // false
-console.log(a[1] === a[2]); // false
+let a = {'a': 3, 'a': 5}
+
+
+  console.log(a)

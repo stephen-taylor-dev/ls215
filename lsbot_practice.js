@@ -780,3 +780,30 @@ findNextIdx(char, set) return number for index
 // // looping u, z and 9
 // console.log(scramble('zbu9'));          // 'bca0'
 // console.log(scramble('ZBU9'));          // 'BCA0'
+
+function mergeSorted(array1, array2) {
+  // Create copies to avoid mutating the original arrays
+  const copy1 = array1.slice();
+  const copy2 = array2.slice();
+  const result = [];
+
+  // Continue until one of the arrays is empty
+  while (copy1.length > 0 && copy2.length > 0) {
+    // Compare the first elements of both arrays
+    // Take the smaller one and add it to the result
+    if (copy1[0] <= copy2[0]) {
+      result.push(copy1.shift());
+    } else {
+      result.push(copy2.shift());
+    }
+  }
+
+  // Add any remaining elements from either array
+  return result.concat(copy1.length === 0 ? copy2 : copy1);
+}
+
+console.log(mergeSorted([1, 3, 5], [2, 4, 6]));       // [1, 2, 3, 4, 5, 6]
+console.log(mergeSorted([1, 5, 9], [2, 6, 8]));       // [1, 2, 5, 6, 8, 9]
+console.log(mergeSorted([1, 1, 3], [2, 2, 4]));       // [1, 1, 2, 2, 3, 4]
+console.log(mergeSorted([], [2, 5, 8]));              // [2, 5, 8]
+console.log(mergeSorted([1, 4, 7], []));              // [1, 4, 7]

@@ -781,29 +781,444 @@ findNextIdx(char, set) return number for index
 // console.log(scramble('zbu9'));          // 'bca0'
 // console.log(scramble('ZBU9'));          // 'BCA0'
 
-function mergeSorted(array1, array2) {
-  // Create copies to avoid mutating the original arrays
-  const copy1 = array1.slice();
-  const copy2 = array2.slice();
-  const result = [];
+// function mergeSorted(array1, array2) {
+//   // Create copies to avoid mutating the original arrays
+//   const copy1 = array1.slice();
+//   const copy2 = array2.slice();
+//   const result = [];
 
-  // Continue until one of the arrays is empty
-  while (copy1.length > 0 && copy2.length > 0) {
-    // Compare the first elements of both arrays
-    // Take the smaller one and add it to the result
-    if (copy1[0] <= copy2[0]) {
-      result.push(copy1.shift());
-    } else {
-      result.push(copy2.shift());
-    }
-  }
+//   // Continue until one of the arrays is empty
+//   while (copy1.length > 0 && copy2.length > 0) {
+//     // Compare the first elements of both arrays
+//     // Take the smaller one and add it to the result
+//     if (copy1[0] <= copy2[0]) {
+//       result.push(copy1.shift());
+//     } else {
+//       result.push(copy2.shift());
+//     }
+//   }
 
-  // Add any remaining elements from either array
-  return result.concat(copy1.length === 0 ? copy2 : copy1);
-}
+//   // Add any remaining elements from either array
+//   return result.concat(copy1.length === 0 ? copy2 : copy1);
+// }
 
-console.log(mergeSorted([1, 3, 5], [2, 4, 6]));       // [1, 2, 3, 4, 5, 6]
-console.log(mergeSorted([1, 5, 9], [2, 6, 8]));       // [1, 2, 5, 6, 8, 9]
-console.log(mergeSorted([1, 1, 3], [2, 2, 4]));       // [1, 1, 2, 2, 3, 4]
-console.log(mergeSorted([], [2, 5, 8]));              // [2, 5, 8]
-console.log(mergeSorted([1, 4, 7], []));              // [1, 4, 7]
+// console.log(mergeSorted([1, 3, 5], [2, 4, 6]));       // [1, 2, 3, 4, 5, 6]
+// console.log(mergeSorted([1, 5, 9], [2, 6, 8]));       // [1, 2, 5, 6, 8, 9]
+// console.log(mergeSorted([1, 1, 3], [2, 2, 4]));       // [1, 1, 2, 2, 3, 4]
+// console.log(mergeSorted([], [2, 5, 8]));              // [2, 5, 8]
+// console.log(mergeSorted([1, 4, 7], []));              // [1, 4, 7]
+
+
+// function wordsInCommon(str1, str2) {
+//   if (typeof str1 !== 'string' || typeof str2 !== 'string') return 'Invalid input';
+//   if (str1 === '' || str2 === '') return [];
+
+//   const words1 = (str1.match(/\b[a-z]+/gi) || []).map(word => word.toLocaleLowerCase());
+//   const words2 = (str2.match(/\b[a-z]+/gi) || []).map(word => word.toLocaleLowerCase());
+
+//   let commonWords = words1.reduce((words, word) => {
+//     if (words2.includes(word) && !words.includes(word)) {
+//       words.push(word)
+//     }
+//     return words;
+//   }, []);
+
+//   return commonWords.sort()
+// }
+
+
+// console.log(wordsInCommon('Hello world', 'hello there')); // ['hello']
+// console.log(wordsInCommon('ok Hello world ', 'ok hello there ')); // ['hello']
+// console.log(wordsInCommon('JavaScript is fun', 'Programming in JavaScript is fun')); // ['fun', 'is', 'javascript']
+// console.log(wordsInCommon('First string', 'Second string')); // ['string']
+// console.log(wordsInCommon('one two three', 'four five six')); // []
+
+// // repeated words
+// console.log(wordsInCommon('one two three one two three', 'one two three one two three')); // [one three two]
+
+// // punctuation
+// console.log(wordsInCommon('Quick! go to town.', 'quick? back from town.')); // ['quick', 'town']
+// console.log(wordsInCommon('thirty-five cars', 'thirty-five trucks')); // ['five', 'thirty']
+
+// // Edge Cases
+// console.log(wordsInCommon('', 'hello')); // []
+// console.log(wordsInCommon('hello', '')); // []
+
+// // error case
+// console.log(wordsInCommon(23, true)); // 'Invalid input'
+// console.log(wordsInCommon(['hello'], undefined)); // 'Invalid input'
+// console.log(wordsInCommon('ok wow', undefined)); // 'Invalid input'
+// console.log(wordsInCommon(['hello'], undefined)); // 'Invalid input'
+
+// // Special characters between letters
+// // ['hello']
+// console.log(wordsInCommon('h@e#l%l^o', 'he-llo'));
+
+
+/*
+
+Intermediate Level Interview Question for LS216
+
+Problem Description
+Write a function called groupAnagrams that takes an array of strings and returns an array of arrays, where each inner array contains a group of anagrams. An anagram is a word formed by rearranging the letters of another word.
+
+Explicit Rules:
+•   Words in the same group must be anagrams of each other
+•   Each string in the input array should appear exactly once in the output
+•   The order of the anagram groups in the output array doesn't matter
+•   The order of strings within each anagram group doesn't matter
+
+Questions
+- will always be 1 arg? 
+  - will we always be given an at least one argument or more?
+  - what to return if not 
+- will arg alays be an array?
+- will it be a sparse array?
+- will it ever an empty array?
+- will the array contain object properties
+- will the array only contain string elements? what to do if not?
+- will strings ever contain empty string? what to do if so?
+- are strings and spellings case sensitive?
+- how should we handle words separated by dashses? split into to words or treat whole string as a word?
+- will strings only contain letters? 
+- will the same words appear more than once in the input array?
+  - if same word appears twice should it be included only once in the output array?
+
+Problem:
+input: array of strings
+output: array of arrays of strings (anagrams)
+
+Rules
+- Words in the same group must be anagrams of each other
+- Each string in the input array should appear exactly once in the output
+- treats as case-insensitive but output in anagram array should presever org case
+- 
+
+
+
+Examples / Test Cases:
+
+groupAnagrams(["listen", "silent", "enlist", "hello", "world"]);
+// [["listen", "silent", "enlist"], ["hello"], ["world"]]
+
+groupAnagrams(["act", "cat", "tac", "dog", "god"]);
+// [["act", "cat", "tac"], ["dog", "god"]]
+
+groupAnagrams(["abc", "cab", "def", "fed", "bca", "aaa"]);
+// [["abc", "cab", "bca"], ["def", "fed"], ["aaa"]]
+
+Data structure
+- start array of strings
+
+- array of arrays of characters
+  - array of characters for each string
+
+- output array of arrays of strings
+
+
+Algorithm:
+1. guards
+  - if not array return null
+  - if empty array return []
+2. intialze an empty anagrams array
+3. add the first word of input array as sub array in empyt arnagrams
+4. iterate over the rest of the words
+  - iterate over each collection anagram, checking if the first word 
+    eqauls the current word
+      - sort first word alphabetically, and sort second alphabetically
+    - add to the current word to the current anagram collection if so
+  - if word is not in any anagram collection add it as its own anagram collection subarray
+
+
+
+3. create copy of the input array of strings with each string sotrted alphabetically
+- loop over eadch of these words
+
+
+
+
+
+
+
+
+
+    - iterate over the rest of the words 
+      - sort the next word alphaetically
+      - if current and next word equal
+
+    5. iterate over the words with the index
+  - sort the word alphabetically
+  - iterate over the rest of the words 
+    - sort the next word alphaetically
+    - if current and next word equal
+  - 
+*/
+
+// function groupAnagrams(words) {
+//   if (!Array.isArray(words)) return null;
+//   if (words.length === 0) return [];
+
+//   const anagrams = [[words.shift()]];
+
+//   words.forEach(word => {
+//     let noMatch = true;
+//     anagrams.some(collection => {
+//       if (alphabetize(word.toLowerCase()) === alphabetize(collection[0].toLowerCase())) {
+//         collection.push(word);
+//         noMatch = false;
+//         return true;
+//       }
+//     });
+//     if (noMatch) {
+//       anagrams.push([word]);
+//     }
+//   });
+
+//   return anagrams;
+// }
+
+// function alphabetize(string) {
+//   return [...string].sort().join('')
+// }
+
+
+
+// // Much better LSbot solution 
+// function groupAnagrams(strings) {
+//   // Handle non-array input
+//   if (!Array.isArray(strings)) {
+//     return null;
+//   }
+  
+//   // Handle empty array
+//   if (strings.length === 0) {
+//     return [];
+//   }
+  
+//   const anagramGroups = {};
+  
+//   // Group strings by normalized form (sorted lowercase letters)
+//   strings.forEach(string => {
+//     const normalized = string.toLowerCase().split('').sort().join('');
+    
+//     if (!anagramGroups[normalized]) {
+//       anagramGroups[normalized] = [];
+//     }
+    
+//     anagramGroups[normalized].push(string);
+//   });
+  
+//   // Convert object to array of arrays
+//   return Object.values(anagramGroups);
+// }
+
+// // General
+// console.log(groupAnagrams(["listen", "silent", "enlist", "hello", "world"]));
+// // [["listen", "silent", "enlist"], ["hello"], ["world"]]
+
+// console.log(groupAnagrams(["act", "cat", "tac", "dog", "god"]));
+// // [["act", "cat", "tac"], ["dog", "god"]]
+
+// console.log(groupAnagrams(["abc", "cab", "def", "fed", "bca", "aaa"]));
+// // [["abc", "cab", "bca"], ["def", "fed"], ["aaa"]]
+
+// // Edge Cases
+// console.log(groupAnagrams(['abc', 'CBA', 'cat'])); // [['abc', 'CBA'], ['cat']]
+// console.log(groupAnagrams([])); // []
+// console.log(groupAnagrams('words')); // null
+
+// // duplicates
+// console.log(groupAnagrams(['abc', 'CBA', 'abc', 'cat'])); // [['abc', 'CBA', 'abc'], ['cat']]
+
+// // spaces and punctuation
+// console.log(groupAnagrams(['abc efg', 'abcefg'])); // [['abc efg'], ['abcefg']]
+// console.log(groupAnagrams(['abc-efg', 'abcefg'])); // [['abc-efg'], ['abcefg']]
+// console.log(groupAnagrams(['abcefg.', 'abcefg'])); // [['abcefg.'], ['abcefg']]
+// console.log(groupAnagrams(['?#abc-efg', 'abcefg'])); // [['?#abc efg'], ['abcefg']]
+
+
+/*
+Practice Question for LS216 Assessment
+Problem: Repeating Character Count
+Problem Description
+
+Write a function called repeatingCharCount that takes a string as an argument and returns an object. Each key in the returned object should be a character that appears consecutively (repeats) in the string, and each value should be the maximum number of consecutive occurrences of that character.
+
+questions
+will always be given arg? what to if not?
+will it always be a string?
+is string case sensitive
+  - does of the keys in the count object matter?
+will we be given non-letter char? how should these handled? such as white space, digits, puncutaion etc
+
+Rules
+- case sensitive: a and A different chars
+- reutnr invalid input for non-string input
+- 
+
+
+input: string
+output object, properties strings with number values
+
+Examples / Test Cases
+repeatingCharCount('aabbb');              // { a: 2, b: 3 }
+repeatingCharCount('abcde');              // {}
+repeatingCharCount('aaaabbbccd');         // { a: 4, b: 3, c: 2, d: 1 }
+repeatingCharCount('abbcccdddd');         // { a: 1, b: 2, c: 3, d: 4 }
+repeatingCharCount('');                   // {}
+
+Data structures:
+string
+possibly an array?
+
+object 
+
+Algorithm:
+guard clause
+  if not string return 'Invalid input'
+  if empty string return empty object
+
+find the amount of rpeating chars 
+add those count to the object
+
+initialze a char coutn object
+initialize a variable for the  current repeatign char to first char in string
+initialze repating char count to 1
+iterate over the string starting at second char
+  if current char is the current repeatingCharCount
+    increment repeatingCharCount by 1
+  else 
+    use repeatingChar as teh key
+    add key to the char coutn object witht the value of teh current count
+    set repeatingChar to the current char
+    set count to 1
+
+if the current char coutn > 1 
+  add key add key to the char coutn object witht the value of teh current count
+return the repeatign char count object
+
+
+*/
+
+// function repeatingCharCount(string) {
+//   if (typeof string !== 'string') return 'Invalid input';
+//   if (string === '') return {};
+
+//   const charCounts = {};
+//   let currRepeatingChar = string[0];
+//   let count = 1;
+
+//   for (let i = 1; i < string.length; i += 1) {
+//     let char = string[i];
+//     if (char === currRepeatingChar) {
+//       count += 1;
+//     } else {
+//       if (count > 1) {
+//         charCounts[currRepeatingChar] = count;
+//       }
+//       currRepeatingChar = char;
+//       count = 1;
+//     }
+//   }
+
+//   if (count > 1) {
+//     charCounts[currRepeatingChar] = count;
+//   }
+
+//   return charCounts;
+// }
+
+// console.log(repeatingCharCount('aabbb'));              // { a: 2, b: 3 }
+// console.log(repeatingCharCount('abcde'));              // {}
+// console.log(repeatingCharCount('aaaabbbccd'));         // { a: 4, b: 3, c: 2 }
+// console.log(repeatingCharCount('abbcccdddd'));         // { b: 2, c: 3, d: 4 }
+// console.log(repeatingCharCount(''));                   // {}
+
+// // Edge Cases
+// console.log(repeatingCharCount('...abc'));                   // {'.': 3}
+// console.log(repeatingCharCount('   abc'));                   // {' ': 3}
+// console.log(repeatingCharCount('11abc'));                   // {'1': 2}
+// console.log(repeatingCharCount('AAAAaaaa'));                   // {'A': 4, 'a': 4}
+
+// console.log(repeatingCharCount(32));                   // 'Invalid input'
+// console.log(repeatingCharCount(['hello']));            // 'Invalid input'
+
+
+/* 
+Write a function called compress that compresses a string by replacing consecutive repeated characters with a single instance of the character followed by the count of repetitions.
+
+Explicit Rules:
+•   If a character appears once, it should appear in the output without a number
+•   If a character appears multiple times consecutively, it should be followed by the count of repetitions
+•   The function should return a new string
+
+questions
+
+
+Examples:
+compress('aabccc');          // 'a2bc3'
+compress('ab');              // 'ab'
+compress('aaabbbccc');       // 'a3b3c3'
+compress('aaaaaaaaaa');      // 'a10'
+
+data structure
+input: string
+output: string
+
+algorithm:
+add guard clauses
+initialze a result string to empty string
+initialze variable called lastChar set to the first char in the string
+initialze count of chars to 1
+
+iterate over each char in the string starting second char
+  if the loop char is equal to lastChar seen
+    increment count by 1
+  else 
+    if the count > 1
+      concatenate lastChar and count  and add this to the result string
+    else 
+      concatenate the lastChar to the reslt string
+    reassign lastChar to current char
+    reassign count to 1
+
+return result string
+*/
+
+// function compress(string) {
+//   if (typeof string !== 'string') return 'Invalid input';
+//   if (string === '') return '';
+
+//   let result = '';
+//   let lastChar = string[0];
+//   let count = 1;
+
+//   for (let i = 1; i <= string.length; i += 1) {
+//     let char = string[i];
+//     if (i === string.length || char !== lastChar) {
+//       result = count > 1 ? result.concat(lastChar + String(count)) : result.concat(lastChar);
+//       lastChar = char;
+//       count = 1;
+//     } else {
+//       count += 1;
+//     }  
+//   }
+
+//   return result;
+// }
+
+// console.log(compress('aabccc'));          // 'a2bc3'
+// console.log(compress('ab'));              // 'ab'
+// console.log(compress('aaabbbccc'));       // 'a3b3c3'
+// console.log(compress('aaaaaaaaaa'));      // 'a10'
+
+// // // edge cases
+// console.log(compress(''));      // ''
+// console.log(compress('AAAaaa'));      // 'A3a3'
+// console.log(compress('...111'));      // '.313'
+// console.log(compress('  a'));         // '  2a'
+// console.log(compress('z\n\nb'));         // 'z\n2b'
+
+// // // error cases
+// console.log(compress(true));         // 'Invalid input'
+// console.log(compress(323));         // 'Invalid input'

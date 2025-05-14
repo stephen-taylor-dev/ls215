@@ -274,7 +274,9 @@ return transposed
 
 //   return newMatrix;
 // }
+
 // function transpose(matrix) {
+//   console.log(matrix.map(row => row[1]));
 //   return matrix[0].map((_, colIdx) => matrix.map(row => row[colIdx]));
 // }
 
@@ -286,3 +288,260 @@ return transposed
 
 // console.log(transpose([[1, 2, 3, 4, 5], [4, 3, 2, 1, 0], [3, 7, 8, 6, 2]]));
 // // [[1, 4, 3], [2, 3, 7], [3, 2, 8], [4, 1, 6], [5, 0, 2]]
+
+/*
+
+As we saw in the previous exercises, a matrix can be represented by an array of arrays. For example, the 3x3 matrix shown below:
+
+Copy Code
+1  5  8
+4  7  2
+3  9  6
+is represented by the following array of arrays:
+
+Copy Code
+const matrix = [
+  [1, 5, 8],
+  [4, 7, 2],
+  [3, 9, 6],
+];
+A 90-degree rotation of a matrix produces a new matrix in which each side of the matrix is rotated clockwise by 90 degrees. For example, the 90-degree rotation of the matrix shown above is:
+
+Copy Code
+3  4  1
+9  7  5
+6  2  8
+A 90-degree rotation of a non-square matrix is similar. For example, given the following matrix:
+
+Copy Code
+3  4  1
+9  7  5
+its 90-degree rotation is:
+
+Copy Code
+9  3
+7  4
+5  1
+Write a function that takes an arbitrary MxN matrix, rotates it clockwise by 90-degrees as described above, and returns the result as a new matrix. The function should not mutate the original matrix.
+
+Problem:
+Inputs: matrix (array of arrays)
+output: new matrix (array of arrays)
+
+Rules
+- may be non-square (sides can be on any length)
+- rotate 90 degress
+  - taking all elements in first column and place them in the first row
+  -  order of these elements is last first and first last
+
+Rotated matrix
+- number of rows is the length of the first row 
+- Length of each row will be the number of rows in original matrix
+
+Data structure
+input arg matrix array
+new roated matrix array
+
+Algorithm:
+1. initialize a new rotated array
+2. iterate over the columns, starting at the first (colIdx, 0)
+  (iterate up to the size of the first row)
+  3. iterate over the each row, to get the element in the current, starting at the last row down to the first row (rowIdx) 
+    (iterate from the number of rows in the matrix - 1, down to 0)
+    push current element at the rowIdx, colIds to the sub array
+  after iterating push sub arry to rotated array
+return roated array 
+
+Examples:
+
+const matrix = [
+  [1, 5, 8],
+  [4, 7, 2],
+  [3, 9, 6],
+];
+
+3  4  1
+9  7  5
+6  2  8
+
+
+3  4  1
+9  7  5
+
+9  3
+7  4
+5  1
+
+[[1], 
+  [2], 
+  [3], 
+  [4]]
+*/
+
+
+// function rotate90(matrix) {
+//   const rotated = [];
+//   let numRows = matrix.length;
+//   let numColumns = matrix[0].length;
+
+//   for (let colIdx = 0; colIdx < numColumns; colIdx += 1) {
+//     let subArray = [];
+//     for (let rowIdx = numRows - 1; rowIdx >= 0; rowIdx -= 1) {
+//       subArray.push(matrix[rowIdx][colIdx]);
+//     }
+//     rotated.push(subArray);
+//   }
+
+//   return rotated;
+// }
+
+
+
+
+
+// const matrix1 = [
+//   [1, 5, 8],
+//   [4, 7, 2],
+//   [3, 9, 6],
+// ];
+
+// const matrix2 = [
+//   [3, 7, 4, 2],
+//   [5, 1, 0, 8],
+// ];
+// const matrix3 = [[1]];
+
+// const matrix4 = [[1, 2, 3, 4]];
+
+// const matrix5 = [[1], [2], [3], [4]];
+
+// const newMatrix1 = rotate90(matrix1);
+// const newMatrix2 = rotate90(matrix2);
+// const newMatrix2Org = rotate90(rotate90(rotate90(rotate90(matrix2))));
+// const newMatrix3 = rotate90(matrix3);
+// const newMatrix4 = rotate90(matrix4);
+// const newMatrix5 = rotate90(matrix5);
+
+// console.log(newMatrix1);      // [[3, 4, 1], [9, 7, 5], [6, 2, 8]]
+// console.log(newMatrix2);      // [[5, 3], [1, 7], [0, 4], [8, 2]]
+// console.log(newMatrix2Org);   // `matrix2` --> [[3, 7, 4, 2], [5, 1, 0, 8]]
+// console.log(newMatrix3);      // `matrix3` --> [[1]]
+// console.log(newMatrix4);      // `matrix4` --> [[1], [2], [3], [4]]
+// console.log(newMatrix5);      // `matrix5` --> [[4, 3, 2, 1]]
+
+
+
+/*
+Merge Sorted Lists
+Write a function that takes two sorted arrays as arguments and returns a new array that contains all the elements from both input arrays in sorted order.
+
+You may not provide any solution that requires you to sort the result array. You must build the result array one element at a time in the proper order.
+
+Your solution should not mutate the input arrays.
+
+Questions
+- will be givne 1 arg? what to do if not? what to with extras
+- will we always be given an array ? what should if not an array
+- will array elemetns always be integers?
+- will they contain special elements such as NaN, Infinity, or -Infinity? if so how should they be sorted?
+- will elements be negative?
+- will array be a sparse array? 
+- will array contian object properties? how to handle that?
+
+Rules
+- can't use sort method
+- build result array 1 element at a time
+- cannot mutate original array
+- arrays will not necessarily be the same length
+- if multiple elemnts of same value, add all of them that occur
+
+Problem
+input: two arrays both sorted
+output: 1 array merged 
+
+Examples
+merge([1, 5, 9], [2, 6, 8]);      // [1, 2, 5, 6, 8, 9]
+merge([-5, -1, 9], [-8, 2, 6]);      // [-8, -5, -1, 2, 6, 9]
+merge([1, 1, 3], [2, 2]);         // [1, 1, 2, 2, 3]
+merge([0, 3], [1, 5]);         // [0, 1, 3, 5]
+merge([], [1, 4, 5]);             // [1, 4, 5]
+merge([1, 4, 5], []);             // [1, 4, 5]
+
+Data structure
+two input arrays
+new result array
+
+
+Algorithm:
+1. initialze a sorted empty array
+2. copy first array 
+3. copy second array
+4. iterate until 1 of the copied arrays are empty
+  1. Compare first element of both arrays
+    1. if first array element is < second array elemetns
+        set value to shift of first array
+    2. if first array element and second array elemtn are eqaul
+      set value to shift of first array
+      shift second array as well
+    3. else second array is less than
+      set value to shift of second array
+  2. add smallest elemtn to sorted array
+
+5. if any of the arrays are not empty, add remaining elemetns to the end of teh sorted array.
+  1. if length of first !== 0
+    add remaing elements of first arry to  sort array
+  2. else if length of second ! == 0
+    add remaining elments o second array to sort array
+6. return sorted array
+
+
+*/
+
+
+// function merge(orgArr1, orgArr2) {
+//   let arr1 = [...orgArr1];
+//   let arr2 = [...orgArr2];
+//   let sorted = [];
+
+//   while (arr1.length !== 0 && arr2.length !== 0) {
+//     if (arr1[0] === arr2[0]) {
+//       sorted.push(arr1.shift());
+//       arr2.shift;
+//     } else if (arr1[0] < arr2[0]) {
+//       sorted.push(arr1.shift());
+//     } else {
+//       sorted.push(arr2.shift());
+//     }
+//   }
+
+//   if (arr1.length !== 0) {
+//     sorted.push(...arr1);
+//   } else if (arr2.length !== 0) {
+//     sorted.push(...arr2);
+//   }
+
+//   return sorted;
+// }
+
+// function merge(orgArr1, orgArr2) {
+//   let arr1 = [...orgArr1];
+//   let arr2 = [...orgArr2];
+//   let sorted = [];
+
+//   while (arr1.length !== 0 && arr2.length !== 0) {
+//     sorted.push(arr1[0] < arr2[0] ? arr1.shift() : arr2.shift());
+//   }
+
+//   return sorted.concat(arr1.length > 0 ? arr1 : arr2)
+// }
+
+
+
+// console.log(merge([1, 5, 9], [2, 6, 8]));      // [1, 2, 5, 6, 8, 9]
+// console.log(merge([1, 1, 3], [2, 2]));         // [1, 1, 2, 2, 3]
+// console.log(merge([], [1, 4, 5]));             // [1, 4, 5]
+// console.log(merge([1, 4, 5], []));             // [1, 4, 5]
+
+// console.log(merge([-5, -1, 9], [-8, 2, 6]));      // [-8, -5, -1, 2, 6, 9]
+// console.log(merge([1, 1, 3], [2, 2]));         // [1, 1, 2, 2, 3]
+// console.log(merge([0, 3], [1, 5]));         // [0, 1, 3, 5]

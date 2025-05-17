@@ -1222,3 +1222,636 @@ return result string
 // // // error cases
 // console.log(compress(true));         // 'Invalid input'
 // console.log(compress(323));         // 'Invalid input'
+
+
+/*
+
+Intermediate-to-Hard Interview Problem: String Pattern Matcher
+
+Problem Description
+Write a function called patternMatcher that takes two strings as arguments: a pattern string and a source string. The function should determine if the source string follows the pattern defined by the pattern string.
+
+In the pattern string:
+•   Each unique character represents a "token" that matches a word in the source string
+•   The same character appearing multiple times must match the same word each time
+•   Different characters must match different words
+•   A "word" is defined as a sequence of characters separated by spaces
+The function should return true if the source string follows the pattern, and false otherwise.
+
+Questions:
+does the patter determine the number of words it  in the string
+  - 'aaa' => 'red red red' 'aaa' => 'red'
+- will we ever be given no args - hwo handle t
+- will we always be given 2 args?
+- will the first arg always be a string?
+- will the second arg always be a string
+- will either ever be empty string? what to return if patter is empty string 
+- what to return if one or the other is an emtpy string?
+  - 'a' '' return what
+  - '' 'red' return what?
+- can the first or second string contain non-alphabetic chars, like digits, puncutation whitespace
+  - will puncutation ever be used in the words 
+  - 'red green red.' is red and red the same here 
+- treat both case sensitive?
+
+
+Rules
+- if either is empty string, return false
+- pattern is case sensitive 'aA' represents differnt tokens
+- if number of tokens in pattern !== number of words in source, return false
+- patter can contain non-alphabetic chars
+- ignore extra spaces in source string,
+  - ignore start and ending spaces   
+- return false if given non-string inputs 
+
+ 
+Examples / Test Cases
+
+patternMatcher('a', 'red');                                  // true
+patternMatcher('a', 'blue green red');                       // false
+patternMatcher('aba', 'red green red');                      // true
+patternMatcher('aabb', 'red red blue blue');                 // true
+patternMatcher('abba', 'red blue blue red');                 // true
+patternMatcher('abab', 'red blue red blue');                 // true
+patternMatcher('abba', 'red blue green red');                // false
+patternMatcher('abcd', 'red blue green yellow');             // true
+patternMatcher('abcd', 'red blue red yellow');               // false
+
+
+Data structure:
+pattern string
+array of words
+
+object, which pattern and word associated shoudl be 
+
+Algorithm
+Guard clause
+- if eithe rempty string return false
+- if ither is not as string return false
+
+get all the words from source string
+  - probably reges this becaseu of spcases
+
+if the count of chars in patter !== number of words return false
+
+initailze patter object
+iterate over teh words with an index ( for loop )
+  find the char of the token string at iteration
+  find the word at the iteration
+  if this word not in the patter object
+    add it and set the value to the current pattern char
+  if it is in the tokens object
+    check if the current patter char equals the value in it
+    return false  if not
+
+return true;
+    */
+
+// function patternMatcher(pattern, wordsString) {
+//   if (pattern === '' || wordsString === '') return false;
+//   if (typeof pattern !== 'string' || typeof wordsString !== 'string') return false;
+  
+//   const words = (wordsString.match(/\b[\w]+\b/gi) || []);
+
+//   if (words.length !== pattern.length) return false;
+  
+//   const wordToToken = {};
+//   const tokenToWord = {};
+//   for (let index = 0; index < words.length; index += 1) {
+//     let word = words[index];
+//     let token = pattern[index];
+
+//     if (word in wordToToken || token in tokenToWord ) {
+//       if (wordToToken[word] === token && tokenToWord[token] === word) {
+//         continue;
+//       } else {
+//         return false;
+//       }
+//     } else {
+//       wordToToken[word] = token;
+//       tokenToWord[token] = word;
+//     }
+//   }
+
+//   return true;
+// }
+
+
+// // console.log(patternMatcher('a', 'red'));                                  // true
+// // console.log(patternMatcher('a', 'blue green red'));                       // false
+// // console.log(patternMatcher('aba', 'red green red'));                      // true
+// // console.log(patternMatcher('abc', 'red green red'));                      // false
+// // console.log(patternMatcher('aabb', 'red red blue blue'));                 // true
+// // console.log(patternMatcher('abba', 'red blue blue red'));                 // true
+// // console.log(patternMatcher('abab', 'red blue red blue'));                 // true
+// // console.log(patternMatcher('abba', 'red blue green red'));                // false
+// // console.log(patternMatcher('abcd', 'red blue green yellow'));             // true
+// // console.log(patternMatcher('abcd', 'red blue red yellow'));               // false
+
+// // // edge cases
+// // console.log(patternMatcher('aAAa', 'red blue blue red'));               // true
+// // console.log(patternMatcher('#aa#', 'red blue blue red'));               // true
+// // console.log(patternMatcher(' a ', 'blue red blue'));              // true
+// // console.log(patternMatcher('bab', '  red   blue   red  '));           // true
+
+
+// // // error cases
+// console.log(patternMatcher('', 'red'));    // false
+// console.log(patternMatcher('a', ''));    // false
+// console.log(patternMatcher('', ''));    // false
+// console.log(patternMatcher(22, 'red'));    // false
+// console.log(patternMatcher('a', 33));    // false
+// console.log(patternMatcher(true, 33));    // false
+// // wrong number
+// console.log(patternMatcher('aaa', 'hello'));    // false
+// console.log(patternMatcher('a', 'hello hello'));    // false
+
+
+/*
+Interview Practice Problem: Word Transformation
+
+Problem Description
+Write a function called transformWords that takes a string of words and transforms each word according to the following rules:
+1.  If a word starts with a vowel, append "way" to the end of the word.
+2.  If a word starts with a consonant, move all consonants that appear before the first vowel to the end of the word and append "ay" to the end.
+3.  Return the transformed string with the same spacing and punctuation as the original.
+
+
+Examples / Test Cases
+transformWords("apple"); // "appleway"
+transformWords("banana"); // "ananabay"
+transformWords("cherry"); // "errychay"
+transformWords("eat an orange"); // "eatway anway orangeway"
+transformWords("under the bridge"); // "underway ethay idgebray"
+transformWords("Hello, World!"); // "elloHay, orldWay!"
+
+Basic Rules (Explicit)
+•   Words starting with vowels (a, e, i, o, u) get "way" appended
+•   Words starting with consonants have initial consonants moved to the end followed by "ay"
+•   Preserve the original spacing and punctuation, --- and capitalization
+•   Input will be a string of words
+
+no Input
+input not string
+input empty string
+input with no letters or such as digits or punctuation
+will words start with white space
+all lettes in word are consonants
+how treat words with hyphens
+
+Data structure
+array of words
+original string
+new string of replaces letters
+
+
+Algorithm
+split the string on white space
+transform the array of each word
+  if it is not white space
+    transform word
+  else 
+    return the white space
+
+joing back together and return the string
+
+transform word
+  take a string word
+  get base word to transform by filter out and start or ending punctuation
+  
+  check if word starts with a vowel
+    create a new string by appending the string 'way' to the baseword
+    replace the baseword with this new string
+    return this altered string
+  else if starts with a consonant  
+    check if first letter is capitalizated
+      set boolean if it or not
+    intialize a substring for the consonants
+    get the n consonants and other chars before a vowel in the string
+      iterate over string checking if it is not a vowel 
+        append lowercase of char to the substrign of conononts if not
+      else break out of loop
+    create new string by append the consonants to the end of the basewod with the string 'ay'
+    reasign string by capitalizing the first char if it was orignoalaly
+    return the replacemen of the baseword with this string
+  else
+    return the word as is 
+    
+
+
+*/
+
+// function transformWords(words) {
+//   if (words === '') return '';
+//   if (typeof words !== 'string') return 'Invalid input';
+
+//   const wordsArr = words.split(' ');
+
+//   return wordsArr.map(word => {
+//     if (word === '') {
+//       return word;
+//     } else {
+//       return transformWord(word);
+//     }
+//   }).join(' ');
+// }
+
+// function transformWord(word) {
+//   let baseWord = (word.match(//gi) || '');
+//   console.log(baseWord)
+//   baseWord = baseWord ? baseWord[0] : baseWord;
+//   let altered = '';
+//   // vowel
+//   if ((/[aeiou]/i).test(baseWord[0])) {
+//     altered += (baseWord + 'way');
+//     return word.replace(baseWord, altered);
+//   // consonant
+//   } else if ((/[a-z]/i).test(baseWord[0]) && (/[^aeiou]/i).test(baseWord[0])) {
+//     let capitalizated = baseWord[0] === baseWord[0].toUpperCase();
+    
+//     let consonants = '';
+//     let firstVowel = baseWord.length;
+//     for (let i = 0; i < baseWord.length; i += 1) {
+//       let char = baseWord[i];
+//       if ((/[^aeiou]/i).test(char)) {
+//         consonants += char.toLowerCase();
+//       } else {
+//         firstVowel = i;
+//         break;
+//       }
+//     }
+//     altered = (baseWord.slice(firstVowel) + consonants +  'ay');
+//     altered = capitalizated ? altered[0].toUpperCase() + altered.slice(1) : altered;
+    
+//     return word.replace(baseWord, altered);
+//   // other, digits etc.
+//   } else {
+//     return word;
+//   }
+// }
+
+
+// LSBots solution
+// function transformWords(input) {
+//   // Handle edge cases
+//   if (input === '') return '';
+//   if (typeof input !== 'string') return 'Invalid input';
+  
+//   // Split the input into words while preserving punctuation and spacing
+//   return input.replace(/\b[a-z0-9'_-]+\b/gi, transformWord);
+// }
+
+// function transformWord(word) {
+//   // Don't transform numbers
+//   if (/^\d+$/.test(word)) return word;
+  
+//   const isFirstLetterUppercase = /^[A-Z]/.test(word);
+//   const lowerWord = word.toLowerCase();
+//   let result;
+  
+//   // Check if word starts with a vowel
+//   if (/^[aeiou]/i.test(lowerWord)) {
+//     result = lowerWord + 'way';
+//   } else {
+//     // Find the position of the first vowel
+//     const firstVowelIndex = lowerWord.search(/[aeiou]/);
+    
+//     if (firstVowelIndex === -1) {
+//       // No vowels in the word
+//       result = lowerWord + 'ay';
+//     } else {
+//       // Move consonants to the end
+//       result = lowerWord.slice(firstVowelIndex) + lowerWord.slice(0, firstVowelIndex) + 'ay';
+//     }
+//   }
+  
+//   // Restore capitalization pattern
+//   if (isFirstLetterUppercase) {
+//     result = result.charAt(0).toUpperCase() + result.slice(1);
+//   }
+  
+//   return result;
+// }
+
+// console.log(transformWords("apple")); // "appleway"
+// console.log(transformWords("banana")); // "ananabay"
+// console.log(transformWords("cherry")); // "errychay"
+// console.log(transformWords("eat an orange")); // "eatway anway orangeway"
+// console.log(transformWords("eat a orange")); // "eatway away orangeway"
+// console.log(transformWords("under the bridge")); // "underway ethay idgebray"
+// console.log(transformWords("Hello, World!")); // "Ellohay, Orldway!"
+
+// console.log(transformWords("built-tough trucks")); // "uilt-toughbay uckstray"
+// console.log(transformWords("we're")); // "e'reway"
+// console.log(transformWords("2025 cow")); // "2025 owcay"
+// console.log(transformWords("joy&peace")); // "oy&peacejay"
+// console.log(transformWords("eat   an   orange")); // "eatway   anway   orangeway"
+
+
+// // // Edge Cases
+// console.log(transformWords("dddddd")); // "dddddday"
+// console.log(transformWords("")); // ""
+// console.log(transformWords(33)); // "Invalid input"
+
+
+
+
+/*
+Interview Problem: Character Replacer
+Problem Description
+
+Write a function called replaceCharacters that takes two arguments: a string and an object. The function should replace characters in the string with new characters based on the keys and values in the object.
+For example, if the object is { 'a': 'b', 'c': 'd' }, then every occurrence of 'a' in the string should be replaced with 'b', and every occurrence of 'c' should be replaced with 'd'.
+
+Explicit Rules
+•   Replace characters in the input string based on the key-value pairs in the object
+•   Return the new string after all replacements have been made
+•   The original string should not be mutated
+•   If a character in the string matches a key in the object, replace it with the corresponding value
+
+question
+2 args, what if if only one or other
+will first always be string
+will sec alwasy be object?
+what first is empty string
+does case matter
+will object key values alwasy be strings?
+should we preseve case of original string
+will object keys always be 1 single char keys? 
+
+
+Test Cases
+replaceCharacters('hello world', { 'l': 'z', 'o': 'x' });
+// "hezzx wxrzd"
+
+replaceCharacters('programming', { 'r': 'x', 'g': 'y', 'm': 'z' });
+// "pxoyxazzing"
+
+replaceCharacters('abcabc', { 'a': '1', 'b': '2' });
+// "12c12c"
+
+replaceCharacters('test string', {});
+// "test string"
+
+Data structure
+string, object
+new string
+
+
+Algorithm
+if ar1 is not a string and arg2 is not an object return "invalid input"
+if arg1 is empty we return empty string
+if ar2 is empty we return arg1 string
+
+ininiale a new string 
+iterate each char in the input string
+  if that char is a key in the object
+    concat replaced char key value to output string
+  else 
+    concat current ot to output string
+
+return the outpout string
+
+
+replace function match each char in the string
+callback function will replace the char with correct char
+*/
+
+// function replaceCharacters(string, object) {
+//   if (typeof string !== 'string' && typeof object !== 'object') return 'Invalid input';
+//   if (string === '') return '';
+//   if (object === undefined || object.length === 0) return string;
+
+//   let result = ''
+//   for (let i = 0; i < string.length; i += 1) {
+//     let char = string[i];
+    
+//     if (char in object) {
+//       result += String(object[char]);
+//     } else {
+//       result += char;
+//     }
+//   }
+
+//   return result;
+//   // return string.replace(/[.]/g, replaceChar);
+// }
+
+function replaceCharacters(string, object) {
+  if (typeof string !== 'string' && typeof object !== 'object') return 'Invalid input';
+  if (string === '') return '';
+  if (object === undefined || object.length === 0) return string;
+
+  const replaceChar = (char) => {
+    if (char in object) {
+      return String(object[char]);
+    } else {
+      return char;
+    }
+  }
+
+  return string.replace(/./g, replaceChar);
+}
+
+// function replaceChar(char, object) {
+//   if (char in object) {
+//     return String(object[char]);
+//   } else {
+//     return char;
+//   }
+// }
+
+
+console.log(replaceCharacters('hello world', { 'l': 'z', 'o': 'x' }));
+// // "hezzx wxrzd"
+
+// console.log(replaceCharacters('programming', { 'r': 'x', 'g': 'y', 'm': 'z' }));
+// // "pxoyxazzing"
+
+// console.log(replaceCharacters('abcabc', { 'a': '1', 'b': '2' }));
+// // "12c12c"
+
+// console.log(replaceCharacters('test string', {}));
+// // "test string"
+
+// console.log(replaceCharacters('HeLLo world', { 'l': 'z', 'o': 'x' }));
+// // "HeLLo wxrzd"
+
+// console.log(replaceCharacters('', { 'l': 'z', 'o': 'x' })); // ""
+
+// console.log(replaceCharacters('hello world', { 'l': '', 'o': 'x' }));
+// // "hex wxrd"
+
+// console.log(replaceCharacters('hello world', { 'l': 2, 'o': 7 }));
+// // "he227 w7r2d"
+
+// console.log(replaceCharacters('hello world', { ' ': 'z'}));
+// // "hellozworld"
+
+// // Edge Cases
+// console.log(replaceCharacters()); // "Invalid input"
+// console.log(replaceCharacters({})); // "Invalid input"
+// console.log(replaceCharacters('')); // "Invalid input"
+// console.log(replaceCharacters('hello')); // "hello"
+// console.log(replaceCharacters({'a': 'b'})); // "Invalid input"
+// console.log(replaceCharacters(123, true)); // "Invalid input"
+
+
+
+
+
+/*
+Write a function that rotates an array by moving the first element to the end of the array. Do not modify the original array.
+
+If the input is not an array, return undefined.
+If the input is an empty array, return an empty array.
+Review the test cases below, then implement the solution accordingly.
+
+
+Problem
+input: array
+output: new array
+
+data structure
+array
+return array
+
+Algorithm:
+  copy the array by slicing elemnts from 1 to end
+  push the first element of the original array to the slice array
+  return this array
+
+
+*/
+
+// function rotateArray(arr) {
+//   if (!Array.isArray(arr)) return undefined;
+//   if (arr.length === 0) return [];
+
+//   return arr.slice(1).concat(arr[0]);
+// }
+
+
+// console.log(rotateArray([7, 3, 5, 2, 9, 1]));       // [3, 5, 2, 9, 1, 7]
+// console.log(rotateArray(['a', 'b', 'c']));          // ["b", "c", "a"]
+// console.log(rotateArray(['a']));                    // ["a"]
+// console.log(rotateArray([1, 'a', 3, 'c']));         // ["a", 3, "c", 1]
+// console.log(rotateArray([{ a: 2 }, [1, 2], 3]));    // [[1, 2], 3, { a: 2 }]
+// console.log(rotateArray([]));                       // []
+
+// // return `undefined` if the argument is not an array
+// console.log(rotateArray());                         // undefined
+// console.log(rotateArray(1));                        // undefined
+
+
+// // the input array is not mutated
+// const array = [1, 2, 3, 4];
+// rotateArray(array);                    // [2, 3, 4, 1]
+// console.log(array);                                 // [1, 2, 3, 4]
+
+
+
+
+/*
+Write a function that rotates the last n digits of a number. For the rotation, rotate by one digit to the left, moving the first digit to the end.
+
+question
+will always be given argument
+willl it always be number
+will first it ever be negative
+will second ever be negative
+will we get Nan infiniyt - infiniyt
+
+if the second number is greaetr than the nubmer of idigts in first argy? what to do?
+
+PRoblem:
+input: number, number
+output: number
+
+
+Data structure
+convert the number to a string
+individual digits
+array of chars
+
+convert back a integer
+
+Algorithm:
+Convert number to string
+split string into an array of digits
+
+find which digit needs to get swapped 
+delete it from the copied array
+add this element onto the end again
+
+
+*/
+
+function rotateRightmostDigits(number, rotatation) {
+  const digits = [...String(number)];
+
+  let rotIndex = digits.length - rotatation;
+  let val = digits[rotIndex];
+  digits.splice(rotIndex, 1);
+  digits.push(val);
+
+  return Number(digits.join(''));
+}
+
+
+
+
+// console.log(rotateRightmostDigits(735291, 1));      // 735291
+// console.log(rotateRightmostDigits(735291, 2));      // 735219
+// console.log(rotateRightmostDigits(735291, 3));      // 735912
+// console.log(rotateRightmostDigits(735291, 4));      // 732915
+// console.log(rotateRightmostDigits(735291, 5));      // 752913
+// console.log(rotateRightmostDigits(735291, 6));      // 352917
+
+
+/*
+Take the number 735291 and rotate it by one digit to the left, getting 352917. Next, keep the first digit fixed in place and rotate the remaining digits to get 329175. Keep the first two digits fixed in place and rotate again to get 321759. Keep the first three digits fixed in place and rotate again to get 321597. Finally, keep the first four digits fixed in place and rotate the final two digits to get 321579. The resulting number is called the maximum rotation of the original number.
+
+Write a function that takes an integer as an argument and returns the maximum rotation of that integer. You can (and probably should) use the rotateRightmostDigits function from the previous exercise.
+
+
+Examples:
+8703529146 0 10
+7 352914680
+73 29146805
+732 1468059
+7321 680594
+73216 05948
+732160 9485
+7321609 854
+73216098 45
+
+
+Data Structure:
+use string of number
+return a number
+
+
+
+Algorithm:
+iterate from length of input string down to and including 2
+  reassign number to result of perform maxrightroation passing current number and current index and 
+return the number
+
+
+*/
+
+function maxRotation(number) {
+  let numDigits = String(number).length;
+  for (let index = numDigits; index >= 2; index -= 1) {
+    number = rotateRightmostDigits(number, index);
+  } 
+
+  return number;
+}
+
+console.log(maxRotation(735291));          // 321579
+console.log(maxRotation(3));               // 3
+console.log(maxRotation(35));              // 53
+console.log(maxRotation(105));             // 15 -- the leading zero gets dropped
+console.log(maxRotation(8703529146));      // 7321609845

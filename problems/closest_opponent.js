@@ -175,3 +175,98 @@ console.log(findClosestOpponent({
   "Luna" : 15,
   "" : 37
 }, 10) === 15); // 15
+
+
+/*
+Problem
+input: object, and an integer
+ 
+2 args, what to do if not
+will first alwys be object
+  - will it ever be empty? what to return 
+  - will value every be 0
+  - will values always be numbers or null
+  - will numbers ever be nan or inifity or -inifity
+  - does null represnt a inactive Opponent
+will second always be integer? 
+  - will it always be positive
+  - iwll iter very nan infifigy - inifity
+  - will it ever be zero, what to do if so
+what to return if one or the other is mssign
+
+what to return if all oppenents inanctive / null
+
+Data structures
+- object of positions
+- array of the value 
+- number
+
+Algorithm
+gurad if object arg is empty return null
+Find the value with the lowest difference
+if there is a tie in the difference, pick the value that is higher
+
+initialize a result variable set to Infiiknty
+iterate over the values
+  conitnue if value is null
+  else 
+    find the abs value of difference of oppenents' board position - passed in position
+    if the difference is less than or equal to the curent result 
+      reassing the result variable
+
+return the rueslt
+
+reduce the array to a integers
+
+
+*/
+
+function findClosestOpponent(positions, position) {
+  if (Object.keys(positions).length === 0) return null;
+
+  let lowestDiff = Infinity;
+  return Object.values(positions).reduce((result, oppPosition) => {
+    if (oppPosition !== null) {
+      let diff = Math.abs(position - oppPosition);
+      if (diff <= lowestDiff) {
+        result = oppPosition;
+        lowestDiff = diff;
+      } 
+    }
+    return result;
+  })
+}
+
+console.log(findClosestOpponent({
+  "Opponent 1" : 1,
+  "Opponent 2" : 15,
+  "Opponent 3" : 37
+}, 10)); // 15
+
+console.log(findClosestOpponent({
+  "Opponent 1a" : 1,
+  "Opponent 1b" : 5
+}, 3)); // 5
+
+console.log(findClosestOpponent({
+  "Opponent 1a" : 1, "Opponent 1b" : 5,
+  "Opponent 1c" : 50, "Opponent 1d" : 100, "Opponent 1e" : null
+}, 150)); // 100
+
+// same disttnace
+console.log(findClosestOpponent({
+  "Opponent 1" : 1,
+  "Opponent 2" : 5,
+  "Opponent 3" : 15,
+  "Opponent 4" : 37
+}, 10)); // 15
+
+// Edge case
+
+// empty object
+console.log(findClosestOpponent({}, 10)); // null
+// other keys
+console.log(findClosestOpponent({
+  "car" : 1,
+  "truck" : 5
+}, 3)); // 5
